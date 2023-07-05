@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>快速點擊遊戲</title>
+	<style>
+		.header{
+			width:300px;
+			height:500px;
+			position: relative;
+		}
+		.box{
+			
+		}
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+		}
+
+		h1 {
+			text-align: center;
+			color: #333;
+		}
+
+		#container {
+			margin: 0 auto;
+			width: 500px;
+			background-color: rgb(238, 228, 255);
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(251, 153, 153, 0.2);
+			padding: 20px;
+			text-align: center;
+		}
+
+		#image {
+			width: 200px;
+			height: 200px;
+			background-color: lightgray;
+			display: inline-block;
+			margin: 20px;
+			cursor: pointer;
+			border-radius: 50%;
+			transition: background-color 0.2s ease-in-out;
+		}
+
+		#image:hover {
+			background-color: gray;
+		}
+
+		#score, #time {
+			font-size: 24px;
+			margin: 10px;
+			color: #333;
+			text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+		}
+
+		button {
+			background-color: #4CAF50;
+			color: white;
+			font-size: 20px;
+			padding: 10px 20px;
+			border-radius: 5px;
+			border: none;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+			margin: 10px;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+		}
+
+		button:hover {
+			background-color: #3E8E41;
+		}
+	</style>
+	<script>
+		var score = 0;
+		var timeLeft = 30;
+		var timer;
+
+		function startGame() {
+			document.getElementById("startBtn").disabled = true;
+			document.getElementById("pauseBtn").disabled = false;
+			document.getElementById("endBtn").disabled = false;
+
+			document.getElementById("score").innerHTML = "分數：" + score;
+			document.getElementById("time").innerHTML = "時間剩餘：" + timeLeft + " 秒";
+
+			timer = setInterval(function() {
+				timeLeft--;
+				document.getElementById("time").innerHTML = "時間剩餘：" + timeLeft + " 秒";
+
+				if (timeLeft == 0) {
+					endGame();
+				}
+			}, 1000);
+		}
+
+		function pauseGame() {
+			document.getElementById("pauseBtn").innerHTML = "繼續遊戲";
+			document.getElementById("pauseBtn").onclick = resumeGame;
+			clearInterval(timer);
+		}
+
+		function resumeGame() {
+			document.getElementById("pauseBtn").innerHTML = "暫停遊戲";
+			document.getElementById("pauseBtn").onclick = pauseGame;
+			timer = setInterval(function() {
+				timeLeft--;
+				document.getElementById("time").innerHTML = "時間剩餘：" + timeLeft + " 秒";
+
+				if (timeLeft == 0) {
+					endGame();
+				}
+			}, 1000);
+		}
+
+        function endGame() {
+			clearInterval(timer);
+			document.getElementById("pauseBtn").disabled = true;
+			document.getElementById("endBtn").disabled = true;
+
+			document.getElementById("image").onclick = null;
+			document.getElementById("image").style.cursor = "default";
+
+			document.getElementById("score").innerHTML = "遊戲結束！你的分數是：" + score;
+			document.getElementById("time").innerHTML = "";
+
+			var restartBtn = document.createElement("button");
+			restartBtn.innerHTML = "重新開始遊戲";
+			restartBtn.onclick = function() {
+				location.reload();
+			}
+			document.getElementById("container").appendChild(restartBtn);
+		}
+
+		function changeImage() {
+			score++;
+			document.getElementById("score").innerHTML = "分數：" + score;
+
+			var image = document.getElementById("image");
+			image.style.top = Math.floor(Math.random() * 300) + "px";
+			image.style.left = Math.floor(Math.random() * 300) + "px";
+            // 改變圓圈顏色
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            image.style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
+            // 隨機生成形狀
+            var shape = Math.floor(Math.random() * 3);
+            if (shape === 0) {
+                // 圓形
+                image.style.borderRadius = "50%";
+                image.style.transform = "rotate(0deg)";
+            } else if (shape === 1) {
+                // 正方形
+                image.style.borderRadius = "0px";
+                image.style.transform = "rotate(0deg)";
+            } else {
+                // 菱形
+                image.style.borderRadius = "0px";
+                image.style.transform = "rotate(45deg)";
+            }
+        }
+	</script>
+</head>
+<body>
+	<h1>快速點擊遊戲</h1>
+	<div id="container">
+		<div id="image" onclick="changeImage()"></div>
+		<p id="score">分數：0</p>
+		<p id="time">時間剩餘：30 秒</p>
+		<button id="startBtn" onclick="startGame()">開始遊戲</button>
+		<button id="pauseBtn" onclick="pauseGame()" disabled>暫停遊戲</button>
+		<button id="endBtn" onclick="endGame()" disabled>結束遊戲</button>
+	</div>
+</body>
+</html>
+

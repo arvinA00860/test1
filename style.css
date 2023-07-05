@@ -1,0 +1,29 @@
+/*layout 共通布局*/
+.wrap{
+    width: 500px;
+    margin: 0 auto;
+}
+.header{
+    height: 50px;
+    background: orange;
+}
+.content{
+    padding: 30px;
+}
+.footer{
+    height: 50px;
+    background: pink;
+}
+
+/*課程CSS*/
+.course .list{
+
+}
+
+.course a{
+
+}
+
+
+/*問答CSS*/
+
